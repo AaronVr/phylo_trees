@@ -1,16 +1,18 @@
 from __future__ import annotations
 from typing import Iterator, Optional
-import src.helpers.tree_to_ascii as ascii_helper
 from collections import deque
 import math
+
+import src.helpers.tree_helpers.tree_to_ascii as ascii_helper
 
 class TreeNode:
     DEFAULT_NAME = ''
     DEFAULT_DISTANCE = 1.0
-
+    
     def __init__(self, /, name: str = DEFAULT_NAME, distance: float = DEFAULT_DISTANCE, children: list[TreeNode] = []):
         self.name = name
         self._children = []
+        self.features = {}
         self.parent = None
         self.children = children
         self.distance = distance
@@ -53,6 +55,15 @@ class TreeNode:
     def distance(self, value: float):
         assert isinstance(value, float), "The distance value of a TreeNode must be a float."
         self._distance = value
+
+    @property
+    def features(self) -> dict[str, str]:
+        return self._features
+
+    @features.setter
+    def features(self, value: dict[str, str]):
+        assert isinstance(value, dict), "The features of a node should be a dict."
+        self._features = value
 
     ######################
     # Computed variables #
@@ -138,7 +149,7 @@ class TreeNode:
         if not different_ancestors:
             return math.inf
 
-        return len(different_ancestors) + 2 if topology_only else sum([node.distance for node in different_ancestors])
+        return len(different_ancestors) if topology_only else sum([node.distance for node in different_ancestors])
 
     def get_common_ancestor(self, other: TreeNode) -> Optional[TreeNode]:
         ancestors = self.ancestors
@@ -148,9 +159,6 @@ class TreeNode:
                 return other_ancestor
 
         return None
-
-    def get_all_distances(self) -> DistanceMatrix:
-        raise "Not yet implemented"
 
     def to_newick(self) -> str:
         newick = ""

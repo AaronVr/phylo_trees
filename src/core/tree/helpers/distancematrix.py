@@ -1,6 +1,8 @@
-from treenode import TreeNode
+from __future__ import annotations
 import numpy as np
 from typing import Union
+
+from src.core.tree import TreeNode
 
 class DistanceMatrix:
     def __init__(self, _tree: TreeNode):
@@ -59,8 +61,6 @@ class DistanceMatrix:
 
         leaves1_mesh, leaves2_mesh = np.meshgrid(leaves1_indices, leaves2_indices)
 
-        # The matrix is symmetrical, it's enough to only look at coordinates with x < y. 
-        # This also excludes comparing a leaf with itself. To include this option, set < to <=
         valid_indices = leaves1_mesh != leaves2_mesh
 
         return self._matrix[leaves1_mesh[valid_indices], leaves2_mesh[valid_indices]]

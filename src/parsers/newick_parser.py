@@ -1,5 +1,5 @@
 import re 
-from src.core.tree import *
+from src.core.tree import TreeNode
 from typing import Optional
 
 quoted_name_field = r'(\"|\')(.*)(?!\2)*\2'
